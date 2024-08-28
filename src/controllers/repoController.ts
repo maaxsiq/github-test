@@ -1,12 +1,17 @@
 import { Request, Response } from 'express';
-import { fetchMyRepos, searchReposByName, saveFavorite, getFavoritesFromStorage } from '../services/githubService';
+import { fetchMyRepos, searchReposByName } from '../services/githubService';
+import { getFavoritesFromStorage, saveFavorite } from '../storage/favoritesStorage';
 
 export const getMyRepos = async (req: Request, res: Response): Promise<void> => {
   try {
-    const repos = await fetchMyRepos();
+    const repos = await fetchMyRepos('<YOUR_GITHUB_USERNAME>');
     res.json(repos);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'An unknown error occurred' });
+    }
   }
 };
 
@@ -15,8 +20,12 @@ export const searchRepos = async (req: Request, res: Response): Promise<void> =>
   try {
     const repos = await searchReposByName(q as string);
     res.json(repos);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'An unknown error occurred' });
+    }
   }
 };
 
@@ -30,7 +39,11 @@ export const addFavorite = (req: Request, res: Response): void => {
   try {
     saveFavorite(name);
     res.status(201).json({ message: 'Favorite added successfully' });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'An unknown error occurred' });
+    }
   }
 };
