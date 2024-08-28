@@ -4,7 +4,7 @@ import { getFavoritesFromStorage, saveFavorite } from '../storage/favoritesStora
 
 export const getMyRepos = async (req: Request, res: Response): Promise<void> => {
   try {
-    const repos = await fetchMyRepos('<YOUR_GITHUB_USERNAME>');
+    const repos = await fetchMyRepos('maaxsiq');
     res.json(repos);
   } catch (error) {
     if (error instanceof Error) {
